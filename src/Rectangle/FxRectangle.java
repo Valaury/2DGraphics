@@ -1,50 +1,58 @@
 package Rectangle;
 
 import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.event.*;
+import javafx.geometry.*;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.*;
+import javafx.scene.shape.*;
 
-
+/**
+ *
+ * @author Prince
+ */
 public class FxRectangle extends Application {
-    private double stageHt, stageWd, midX, midY;
+
+    int vCurrentRow = 0;
+
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("working with FX rectangle");
+        GridPane gPane = new GridPane();
+        gPane.setHgap(5);
+        gPane.setVgap(20);
         
-        //create a group, all GUI elements will be added to this group
-        //the group is then added to primaryStage
-        Group grp = new Group();
-        Scene newScene = new Scene(grp, 450, 400, Color.WHITE);
-        Rectangle rect = new Rectangle();
-        Rectangle rect1 = new Rectangle();
-        stageHt = newScene.getHeight();
-        stageWd = newScene.getWidth();
-        rect.setHeight(70);
-        rect.setWidth(250);
-        rect.setFill(Color.DARKMAGENTA);
-        
-        rect1.setHeight(10);
-        rect1.setWidth(10);
-        rect1.setFill(Color.BEIGE);
-        
-        //put rectangle in the centre
-        midX = (stageWd - rect.getWidth()) / 2;
-        midY = (stageHt - rect.getHeight()) /2;
-        rect.setX(midX);         
-        rect.setY(midY);
-        rect1.setX(midX/2);
-        rect1.setY(midY/2);
-        grp.getChildren().add(rect);
-        
-        primaryStage.setScene(newScene);
+        Button btnDrawRect = new Button();
+        btnDrawRect.setPrefSize(250, 21);
+        btnDrawRect.setText("Draw Rectangle");
+        btnDrawRect.setOnAction((ActionEvent event) -> {
+            Rectangle rectangle = new Rectangle(0, 0, 250, 150);
+            rectangle.setFill(Color.BLACK);
+            rectangle.setSmooth(true);
+            rectangle.setArcHeight(25);
+            rectangle.setArcWidth(25);
+            gPane.addRow(vCurrentRow, rectangle);
+            GridPane.setMargin(rectangle, new Insets(0,0,0,25));
+            vCurrentRow++;
+        });
+
+        gPane.addRow(vCurrentRow, btnDrawRect);
+        gPane.setMargin(btnDrawRect, new Insets(10,25,10,25));
+        vCurrentRow++;
+
+        Scene scene = new Scene(gPane, 300, 1000);
+        primaryStage.setTitle("Rectangles");
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }
-    
+
 }

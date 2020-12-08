@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package GUIChat;
 
 import static GUIChat.ChatServer.dout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,13 +13,10 @@ import java.util.Calendar;
 import java.util.Date;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 
-/**
- *
- * @author User
- */
+
 public class ChatClient extends javax.swing.JFrame {
-
     static Socket s ;
     static DataInputStream din ;
     static DataOutputStream dout;
@@ -30,6 +24,16 @@ public class ChatClient extends javax.swing.JFrame {
     public ChatClient() {
         initComponents();
         jText.addActionListener(action);
+        ImageIcon icon= new ImageIcon("Yahoo Logo.png");
+        
+        this.setIconImage(icon.getImage());
+        this.getContentPane().setBackground(Color.getColor("5B00C1"));
+        
+        String datepattern = "dd/M/yyyy";
+        DateFormat df1 = new SimpleDateFormat(datepattern);
+        Date date1 = Calendar.getInstance().getTime();
+        String today = df1.format(date1);
+        lblDate.setText(today);    
     }
     
      Action action = new AbstractAction(){
@@ -48,9 +52,12 @@ public class ChatClient extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jText = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        lbl = new javax.swing.JLabel();
+        lblDate = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Chat Client");
+        setBackground(new java.awt.Color(71, 0, 193));
         setMaximumSize(new java.awt.Dimension(418, 325));
         setMinimumSize(new java.awt.Dimension(418, 325));
         setPreferredSize(new java.awt.Dimension(418, 325));
@@ -70,30 +77,46 @@ public class ChatClient extends javax.swing.JFrame {
             }
         });
 
+        lbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUIChat/Yahoo.png"))); // NOI18N
+
+        lblDate.setForeground(new java.awt.Color(255, 255, 255));
+        lblDate.setText("DD/MM/YYYY");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jText)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(lbl)
+                        .addGap(240, 240, 240)
+                        .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jText, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jText, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(lblDate))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lbl, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(8, 8, 8)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
@@ -106,7 +129,7 @@ public class ChatClient extends javax.swing.JFrame {
     public void Save(){
         String msgOut = jText.getText();
         
-        String pattern = "MM/dd h:mm";
+        String pattern = "h:mm a";
         DateFormat df = new SimpleDateFormat(pattern);
         Date date = Calendar.getInstance().getTime();
         String time = df.format(date);
@@ -121,11 +144,11 @@ public class ChatClient extends javax.swing.JFrame {
         {
             e.printStackTrace();
         }
-        } 
+      } 
     }
     
-    public static void main(String args[]) {
-
+    public static void main(String args[]) throws IOException {
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ChatClient().setVisible(true);
@@ -154,5 +177,7 @@ public class ChatClient extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jText;
     private static javax.swing.JTextArea jTextArea1;
+    private javax.swing.JLabel lbl;
+    private javax.swing.JLabel lblDate;
     // End of variables declaration//GEN-END:variables
 }
